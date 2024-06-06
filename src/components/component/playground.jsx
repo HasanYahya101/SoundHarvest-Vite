@@ -199,7 +199,7 @@ export function Playground() {
                                     <SelectValue placeholder="Select format" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="audio">Audio</SelectItem>
+                                    <SelectItem value="audio">Audio (MP3)</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
@@ -211,11 +211,11 @@ export function Playground() {
                                     <SelectValue placeholder="Select quality" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="320">320</SelectItem>
-                                    <SelectItem value="256">256</SelectItem>
-                                    <SelectItem value="192">192</SelectItem>
-                                    <SelectItem value="128">128</SelectItem>
-                                    <SelectItem value="64">64</SelectItem>
+                                    <SelectItem value="320">320 kbps</SelectItem>
+                                    <SelectItem value="256">256 kbps</SelectItem>
+                                    <SelectItem value="192">192 kbps</SelectItem>
+                                    <SelectItem value="128">128 kbps</SelectItem>
+                                    <SelectItem value="64">64 kbps</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
