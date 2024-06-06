@@ -86,7 +86,7 @@ export function Playground() {
 
             setButtonClicked(false);
 
-            window.open(downloadLink, '_blank');
+            window.open(downloadLink, downloadLink);
 
             return;
         } catch (error) {
