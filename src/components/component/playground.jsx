@@ -24,14 +24,24 @@ export function Playground() {
         if (videoUrl === '' || videoUrl === null) {
             toast({
                 title: "Error",
-                description: "Please enter a valid YouTube link.",
+                description: "Please enter a valid YouTube link in the field.",
+                variant: "destructive"
             })
             return;
         }
         else if (format === '' || format === null || format !== 'audio') {
             toast({
                 title: "Error",
-                description: "Please select a format.",
+                description: "Please select a file format from the list.",
+                variant: "destructive"
+            })
+            return;
+        }
+        else if (quality === '' || quality === null) {
+            toast({
+                title: "Error",
+                description: "Please select an audio quality from the list.",
+                variant: "destructive"
             })
             return;
         }
@@ -40,7 +50,6 @@ export function Playground() {
 
     function windowLoaded() {
         toast({
-            variant: "destructive",
             title: "Warning",
             description: "There is a hard limit of 1000 on the number of downloads per month. If the limit is exceeded you might be stuck in a loop.",
         })
