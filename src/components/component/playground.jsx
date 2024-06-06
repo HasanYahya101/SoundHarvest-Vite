@@ -17,6 +17,7 @@ export function Playground() {
     const [format, setFormat] = useState('');
     const [quality, setQuality] = useState('');
     const [buttonClicked, setButtonClicked] = useState(false);
+    const [encodedUrl, setEncodedUrl] = useState('');
 
     const { toast } = useToast();
 
@@ -49,17 +50,27 @@ export function Playground() {
         setButtonClicked(true);
 
         const encodedUrl = encodeURIComponent(videoUrl);
+        setEncodedUrl(encodedUrl);
 
         toast({
             title: "Request Sent",
             description: "Your request is being processed. Please wait...",
         })
 
+        const url = `https://youtube-mp3-downloader2.p.rapidapi.com/ytmp3/ytmp3/custom/?url=${encodedUrl}&quality=${quality}`;
+        const options = {
+            method: 'GET',
+            headers: {
+                'x-rapidapi-key': 'b37f4bf8f6mshb21067d56d51b07p112cd6jsn90e370560ac1',
+                'x-rapidapi-host': 'youtube-mp3-downloader2.p.rapidapi.com'
+            }
+        };
+
         try {
-            const response = await fetchDownloadLink(encodedUrl);
+            const response = await fetch(url, options);
+            const result = await response.text();
 
-            console.log("res", response);
-
+            const resultObject = JSON.parse(result);
 
             if (response === null || response === '' || response === undefined) {
                 toast({
@@ -71,11 +82,39 @@ export function Playground() {
                 return;
             }
 
-            const videoid = response.videoid;
-            const uniqueId = response.uniqueid;
-            const progress = response.progress;
-            const status = response.status;
-            const downloadLink = response.dlink;
+            if (resultObject.dlink === null || resultObject.dlink === '' || resultObject.dlink === undefined) {
+                toast({
+                    title: "Error",
+                    description: "An error occurred while processing your request.",
+                    variant: "destructive"
+                })
+                setButtonClicked(false);
+                return;
+            }
+            else if (resultObject.status === 'error') {
+                toast({
+                    title: "Error",
+                    description: "An error occurred while processing your request.",
+                    variant: "destructive"
+                })
+                setButtonClicked(false);
+                return;
+            }
+            else if (resultObject.progress < 100) {
+                toast({
+                    title: "Error",
+                    description: "An error occurred while processing your request.",
+                    variant: "destructive"
+                })
+                setButtonClicked(false);
+                return;
+            }
+
+            const videoid = resultObject.videoid;
+            const uniqueId = resultObject.uniqueid;
+            const progress = resultObject.progress;
+            const status = resultObject.status;
+            const downloadLink = resultObject.dlink;
 
             if (status === 'finished' && progress === 100) {
                 setDownloadLink(downloadLink);
@@ -88,8 +127,6 @@ export function Playground() {
 
             setButtonClicked(false);
 
-            // print download link
-            console.log("dl", downloadLink);
 
             window.open(downloadLink, '_blank');
 
@@ -116,33 +153,6 @@ export function Playground() {
     useEffect(() => {
         windowLoaded();
     }, []);
-
-    useEffect(() => {
-        console.log(videoUrl, format, quality);
-    }, [videoUrl, format, quality]);
-
-    const fetchDownloadLink = (requestLink) => {
-        return new Promise((resolve, reject) => {
-            const xhr = new XMLHttpRequest();
-            xhr.withCredentials = true;
-
-            xhr.addEventListener('readystatechange', function () {
-                if (this.readyState === this.DONE) {
-                    if (this.status === 200) {
-                        resolve(this.responseText);
-                    } else {
-                        reject(new Error('Failed to fetch download link'));
-                    }
-                }
-            });
-
-            xhr.open('GET', `https://youtube-mp3-downloader2.p.rapidapi.com/ytmp3/ytmp3/custom/?url=${requestLink}&quality=${quality}`);
-            xhr.setRequestHeader('x-rapidapi-key', 'b37f4bf8f6mshb21067d56d51b07p112cd6jsn90e370560ac1');
-            xhr.setRequestHeader('x-rapidapi-host', 'youtube-mp3-downloader2.p.rapidapi.com');
-
-            xhr.send();
-        });
-    };
 
 
     return (
