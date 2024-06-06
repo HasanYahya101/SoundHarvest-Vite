@@ -47,6 +47,25 @@ export function Playground() {
             return;
         }
 
+        const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com\/(watch\?v=)|youtu\.be\/)/;
+        if (!youtubeRegex.test(videoUrl)) {
+            toast({
+                title: "Error",
+                description: "Please enter a valid YouTube video link in the field.",
+                variant: "destructive"
+            })
+            return;
+        }
+
+        if (videoUrl.includes('&list=')) {
+            toast({
+                title: "Error",
+                description: "Please enter a valid YouTube video link. Playlists are not supported.",
+                variant: "destructive"
+            })
+            return;
+        }
+
         setButtonClicked(true);
 
         const encodedUrl = encodeURIComponent(videoUrl);
