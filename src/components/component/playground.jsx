@@ -46,6 +46,52 @@ export function Playground() {
             return;
         }
 
+        setButtonClicked(true);
+
+        const encodedUrl = encodeURIComponent(videoUrl);
+
+        toast({
+            title: "Request Sent",
+            description: "Your request is being processed. Please wait...",
+        })
+
+
+        const response = await fetchDownloadLink(encodedUrl);
+
+        // print response
+        console.log("res", response);
+
+        if (response === null || response === '' || response === undefined || !response.hasOwnProperty('dlink')) {
+            toast({
+                title: "Error",
+                description: "An error occurred while processing your request.",
+                variant: "destructive"
+            })
+            setButtonClicked(false);
+            return;
+        }
+
+        const videoid = response.videoid;
+        const uniqueId = response.uniqueid;
+        const progress = response.progress;
+        const status = response.status;
+        const downloadLink = response.dlink;
+
+        if (status === 'finished' && progress === 100) {
+            setDownloadLink(downloadLink);
+        }
+
+        toast({
+            title: "Success",
+            description: "Your download will begin shortly.",
+        })
+
+        setButtonClicked(false);
+
+        window.open(downloadLink, '_blank');
+
+        return;
+
     };
 
     function windowLoaded() {
@@ -59,6 +105,32 @@ export function Playground() {
         windowLoaded();
     }, []);
 
+    useEffect(() => {
+        console.log(videoUrl, format, quality);
+    }, [videoUrl, format, quality]);
+
+    const fetchDownloadLink = (requestLink) => {
+        return new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
+            xhr.withCredentials = true;
+
+            xhr.addEventListener('readystatechange', function () {
+                if (this.readyState === this.DONE) {
+                    if (this.status === 200) {
+                        resolve(this.responseText);
+                    } else {
+                        reject(new Error('Failed to fetch download link'));
+                    }
+                }
+            });
+
+            xhr.open('GET', `https://youtube-mp3-downloader2.p.rapidapi.com/ytmp3/ytmp3/custom/?url=${requestLink}&quality=${quality}`);
+            xhr.setRequestHeader('x-rapidapi-key', 'b37f4bf8f6mshb21067d56d51b07p112cd6jsn90e370560ac1');
+            xhr.setRequestHeader('x-rapidapi-host', 'youtube-mp3-downloader2.p.rapidapi.com');
+
+            xhr.send();
+        });
+    };
 
 
     return (
@@ -80,7 +152,7 @@ export function Playground() {
                     <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
                             <Label htmlFor="format">Format</Label>
-                            <Select id="format" onChange={(e) => setFormat(e.target.value)}
+                            <Select id="format" onValueChange={(value) => setFormat(value)}
                             >
                                 <SelectTrigger>
                                     <SelectValue placeholder="Select format" />
@@ -92,7 +164,7 @@ export function Playground() {
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="quality">Quality</Label>
-                            <Select id="quality" onChange={(e) => setQuality(e.target.value)}
+                            <Select id="quality" onValueChange={(value) => setQuality(value)}
                             >
                                 <SelectTrigger>
                                     <SelectValue placeholder="Select quality" />
@@ -122,7 +194,7 @@ export function Playground() {
                         )}
 
                 </CardFooter>
-            </Card>
+            </Card >
         )
     );
 }
