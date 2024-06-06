@@ -55,13 +55,41 @@ export function Playground() {
             description: "Your request is being processed. Please wait...",
         })
 
+        try {
+            const response = await fetchDownloadLink(encodedUrl);
 
-        const response = await fetchDownloadLink(encodedUrl);
 
-        // print response
-        console.log("res", response);
+            if (response === null || response === '' || response === undefined) {
+                toast({
+                    title: "Error",
+                    description: "An error occurred while processing your request.",
+                    variant: "destructive"
+                })
+                setButtonClicked(false);
+                return;
+            }
 
-        if (response === null || response === '' || response === undefined || !response.hasOwnProperty('dlink')) {
+            const videoid = response.videoid;
+            const uniqueId = response.uniqueid;
+            const progress = response.progress;
+            const status = response.status;
+            const downloadLink = response.dlink;
+
+            if (status === 'finished' && progress === 100) {
+                setDownloadLink(downloadLink);
+            }
+
+            toast({
+                title: "Success",
+                description: "Your download will begin shortly.",
+            })
+
+            setButtonClicked(false);
+
+            window.open(downloadLink, '_blank');
+
+            return;
+        } catch (error) {
             toast({
                 title: "Error",
                 description: "An error occurred while processing your request.",
@@ -70,27 +98,6 @@ export function Playground() {
             setButtonClicked(false);
             return;
         }
-
-        const videoid = response.videoid;
-        const uniqueId = response.uniqueid;
-        const progress = response.progress;
-        const status = response.status;
-        const downloadLink = response.dlink;
-
-        if (status === 'finished' && progress === 100) {
-            setDownloadLink(downloadLink);
-        }
-
-        toast({
-            title: "Success",
-            description: "Your download will begin shortly.",
-        })
-
-        setButtonClicked(false);
-
-        window.open(downloadLink, '_blank');
-
-        return;
 
     };
 
