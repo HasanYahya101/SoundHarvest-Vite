@@ -18,7 +18,7 @@ This project was deployed to Github Pages and can be tested there. No servers or
 ![Screenshot 2024-06-06 184726](https://github.com/HasanYahya101/SoundHarvest-Vite/assets/118683092/9e8b42cb-7729-4e5a-b7b7-6c615d78d483)
 ![Screenshot 2024-06-06 184759](https://github.com/HasanYahya101/SoundHarvest-Vite/assets/118683092/894b3843-093f-447d-a30d-23001e391f6a)
 <p align="center">
-![Screenshot 2024-06-06 184856](https://github.com/HasanYahya101/SoundHarvest-Vite/assets/118683092/437261f5-eb6c-4007-946a-37386dc2ccce)
+  <img src="https://github.com/HasanYahya101/SoundHarvest-Vite/assets/118683092/437261f5-eb6c-4007-946a-37386dc2ccce" alt="hasanyahya101" />
 </p>
 
 
