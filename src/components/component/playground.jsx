@@ -28,6 +28,13 @@ export function Playground() {
             })
             return;
         }
+        else if (format === '' || format === null || format !== 'audio') {
+            toast({
+                title: "Error",
+                description: "Please select a format.",
+            })
+            return;
+        }
 
     };
 
