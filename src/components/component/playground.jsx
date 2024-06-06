@@ -58,6 +58,8 @@ export function Playground() {
         try {
             const response = await fetchDownloadLink(encodedUrl);
 
+            console.log("res", response);
+
 
             if (response === null || response === '' || response === undefined) {
                 toast({
