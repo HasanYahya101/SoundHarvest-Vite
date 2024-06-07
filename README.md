@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This is a basic Youtube audio downloader (after converting from video to audio). It uses RapidAPI's `Youtube MP3 Downloader` API for this purpose. Please note that there is a hard limit of 1000 total requests per month on this API. So if the limit is passed, you might be stuck in a fetch cycle loop.
+This is a basic Youtube audio downloader (after converting from video to audio). It uses RapidAPI's `Youtube MP3 Downloader` API for this purpose. Please note that there is a hard limit of 1000 total requests per month on this API. So if the limit is passed, you might be stuck in a fetch-cycle loop.
 
 ## UI Library
 
