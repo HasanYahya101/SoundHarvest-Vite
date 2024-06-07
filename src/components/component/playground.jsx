@@ -119,7 +119,7 @@ export function Playground() {
                 setButtonClicked(false);
                 return;
             }
-            else if (resultObject.progress < 100) {
+            else if (resultObject.progress !== 100) {
                 toast({
                     title: "Error",
                     description: "An error occurred while processing your request.",
